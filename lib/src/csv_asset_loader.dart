@@ -3,21 +3,28 @@ import 'dart:ui';
 
 import 'package:csv/csv.dart';
 import 'package:csv/csv_settings_autodetection.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
-
-import 'asset_loader.dart';
 
 //
 // load example/resources/langs/langs.csv
 //
 class CsvAssetLoader extends AssetLoader {
   CSVParser? csvParser;
+  final bool useAutodetect;
+
+  CsvAssetLoader({
+    this.useAutodetect = true,
+  });
 
   @override
   Future<Map<String, dynamic>> load(String path, Locale locale) async {
     if (csvParser == null) {
       log('easy localization loader: load csv file $path');
-      csvParser = CSVParser(await rootBundle.loadString(path));
+      csvParser = CSVParser(
+        await rootBundle.loadString(path),
+        useAutodetect: useAutodetect,
+      );
     } else {
       log('easy localization loader: CSV parser already loaded, read cache');
     }
@@ -60,8 +67,10 @@ class CSVParser {
           csvSettingsDetector:
               useAutodetect && fieldDelimiter == null && eol == null
                   ? FirstOccurrenceSettingsDetector(
+                      fieldDelimiters: [',', ';', '\t'],
+                      textDelimiters: ['"', "'", '”'],
+                      textEndDelimiters: ['"', "'", '”'],
                       eols: ['\r\n', '\n'],
-                      fieldDelimiters: [',', '\t'],
                     )
                   : null,
         );

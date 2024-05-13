@@ -31,7 +31,7 @@ dependencies:
   #Easy Localization main package
   easy_localization: <last_version>
 
-  # stable version install from https://pub.dev/packages
+    # stable version install from https://pub.dev/packages
   easy_localization_loader: <last_version>
 
   # Dev version install from git REPO
@@ -40,10 +40,11 @@ dependencies:
 
 ```
 
-2. Change assetLoader and patch
+2. Change assetLoader and path
 
 ```dart
-...void main(){
+...
+void main(){
 runApp(EasyLocalization(
 child: MyApp(),
 supportedLocales: [Locale('en', 'US'), Locale('ar', 'DZ')],
@@ -55,3 +56,19 @@ assetLoader: CsvAssetLoader()
 ```
 
 3. All done!.
+
+
+### Loaders Specification
+
+#### HttpAssetLoader
+
+In order to use HttpAssetLoader you must provide a path to a folder (i.e. base path) where all your translations are placed like `https://example.com/translations`
+
+Your translations should be created as separate files with `.json` extension. Placing translations as individual files reduces the size of the file to load on application init.
+Example:
+
+```
+translations/
+├── en-US.json
+└── uk-UA.json
+```

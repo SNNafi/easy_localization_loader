@@ -1,15 +1,16 @@
 import 'dart:developer';
 import 'dart:ui';
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/services.dart';
 import 'package:xml/xml.dart';
 
-import 'asset_loader.dart';
-
 //Loader for multiple xml files
 class XmlAssetLoader extends AssetLoader {
+  const XmlAssetLoader();
+
   String getLocalePath(String basePath, Locale locale) {
-    return '$basePath/${localeToString(locale, separator: "-")}.xml';
+    return '$basePath/${locale.toStringWithSeparator(separator: "-")}.xml';
   }
 
   @override
@@ -50,7 +51,7 @@ Map<String, dynamic> convertXmlNodeToMap(XmlNode xmlNode) {
     if (entry is XmlElement) {
       switch (entry.children.length) {
         case 1:
-          map[entry.name.toString()] = entry.text;
+          map[entry.name.toString()] = entry.value;
           break;
         case 0:
           print(entry.name.toString());
